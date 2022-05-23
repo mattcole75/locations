@@ -61,14 +61,17 @@ const get = (req, next) => {
 
 const all = (req, next) => {
 
+    const { id } = req.headers;
+    const { name } = req.body;
+
     const dbConnect = database.getDb();
 
     let query;
     
-    if (req.id)
-        query = { parentRef: req.id }
-    else if (req.name)
-        query = {$text: { $search: req.name, $caseSensitive: false }}
+    if (id)
+        query = { parentRef: id }
+    else if (name)
+        query = {$text: { $search: name, $caseSensitive: false }}
     else
         query = { parentRef: { $exists: false }};
 

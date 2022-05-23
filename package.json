@@ -6,7 +6,6 @@
   "scripts": {
     "locations": "node server.js",
     "test": "echo 'db.location.remove({})' | mongo locations && jest",
-    "testold": "echo 'db.dropDatabase()' | mongo locations && jest",
     "populate": "jest -t 'Test the location microservice POST methods'"
   },
   "keywords": [
@@ -15,8 +14,10 @@
   "author": "Matt Cole",
   "license": "GPL-3.0",
   "dependencies": {
+    "axios": "^0.27.2",
     "bunyan": "^1.8.15",
     "convict": "^6.2.3",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongodb": "^4.6.0",

@@ -13,12 +13,18 @@ const config = convict({
     },
     application: {
         type: String,
-        default: 'auth'
+        default: 'location'
     },
     db: {
         uri: {
             type: String,
             default: process.env.DB_URI
+        }
+    },
+    auth: {
+        uri: {
+            type: String,
+            default: process.env.AUTH_URI
         }
     }
 });

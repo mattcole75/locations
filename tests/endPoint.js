@@ -4,7 +4,7 @@
 // Change history:
 //  1. 
 
-let supertest = require('supertest');
+const supertest = require('supertest');
 const config = require('../configuration/config');
 const application = config.get('application');
 const version = config.get('version');

@@ -12,116 +12,42 @@ const location = require('../controller/location');
 module.exports = (app) => {
 
     app.post('/' + application + '/api/' + version + '/location', (req, res) => {
-        location.post(req, (err, user) => {
+        location.post(req, (err, loc) => {
             res.set('Content-Type', 'application/json');
             if(err)
                 res.status(err.status).send(err);
             else
-                res.status(user.status).send(user);
+                res.status(loc.status).send(loc);
         });
     });
 
     app.patch('/' + application + '/api/' + version + '/location', (req, res) => {
-        location.patch(req, (err, user) => {
+        location.patch(req, (err, loc) => {
             res.set('Content-Type', 'application/json');
             if(err)
                 res.status(err.status).send(err);
             else
-                res.status(user.status).send(user);
+                res.status(loc.status).send(loc);
         });
     });
 
     app.get('/' + application + '/api/' + version + '/location', (req, res) => {
         res.set('Content-Type', 'application/json');
-        location.get(req, (err, user) => {
+        location.get(req, (err, loc) => {
             if(err)
                 res.status(err.status).send(err);
             else
-                res.status(user.status).send(user);
+                res.status(loc.status).send(loc);
         });
     });
 
     app.get('/' + application + '/api/' + version + '/locations', (req, res) => {
         res.set('Content-Type', 'application/json');
-        location.all(req, (err, user) => {
+        location.all(req, (err, loc) => {
             if(err)
                 res.status(err.status).send(err);
             else
-                res.status(user.status).send(user);
+                res.status(loc.status).send(loc);
         });
     });
-
-    // app.post('/' + application + '/api/' + version + '/user/logout', (req, res) => {
-    //     res.set('Content-Type', 'application/json');
-    //     auth.isAuthenticated(req, (err) => {
-    //         if(err)
-    //             res.status(err.status).send(err);
-    //         else {
-    //             auth.logout(req, (err, auth) => {
-    //                 if(err)
-    //                     res.status(err.status).send(err);
-    //                 else
-    //                     res.status(auth.status).send(auth);
-    //             });
-    //         }
-    //     });
-    // });
-
-    // app.patch('/' + application + '/api/' + version + '/user/displayname', (req, res) => {
-    //     res.set('Content-Type', 'application/json');
-    //     auth.isAuthenticated(req, (err) => {
-    //         if(err)
-    //             res.status(err.status).send(err);
-    //         else {
-    //             auth.patchUserDisplayName(req, (err, user) => {
-    //                 if(err)
-    //                     res.status(err.status).send(err);
-    //                 else
-    //                     res.status(user.status).send(user);
-    //             });
-    //         }
-    //     });
-    // });
-
-    // app.patch('/' + application + '/api/' + version + '/user/email', (req, res) => {
-    //     res.set('Content-Type', 'application/json');
-    //     auth.isAuthenticated(req, (err) => {
-    //         if(err)
-    //             res.status(err.status).send(err);
-    //         else {
-    //             auth.patchUserEmail(req, (err, user) => {
-    //                 if(err)
-    //                     res.status(err.status).send(err);
-    //                 else
-    //                     res.status(user.status).send(user);
-    //             });
-    //         }
-    //     });
-    // });
-
-    // app.patch('/' + application + '/api/' + version + '/user/password', (req, res) => {
-    //     res.set('Content-Type', 'application/json');
-    //     auth.isAuthenticated(req, (err) => {
-    //         if(err)
-    //             res.status(err.status).send(err);
-    //         else {
-    //             auth.patchUserPassword(req, (err, user) => {
-    //                 if(err)
-    //                     res.status(err.status).send(err);
-    //                 else
-    //                     res.status(user.status).send(user);
-    //             });
-    //         }
-    //     });
-    // });
-
-    // app.post('/' + application + '/api/' + version + '/authenticate', (req, res) => {
-    //     auth.testToken(req, (err, token) => {
-    //         res.set('Content-Type', 'application/json');
-    //         if(err)
-    //             res.status(err.status).send(err);
-    //         else
-    //             res.status(token.status).send(token);
-    //     });
-    // });
 }
