@@ -12,17 +12,20 @@ const moment = require('moment');
 const axios = require('../../axios/axios');
 
 const post = (req, next) => {
-    let headers; 
 
-    if(req.headers.idtoken)
+    const { idtoken } = req.headers;
+
+    let headers;
+
+    if(idtoken)
         headers = {
             'Content-Type': 'application/json',
-            idToken: req.headers.idtoken 
+            idToken: idtoken 
         };
     else
         return next({status: 400, msg: 'Bad request'}, null);
 
-    axios.post('/approvetransaction', {}, { headers: headers })
+    axios.post('/approvetransaction', { rules: { roles: ['user', 'administrator'] } }, { headers: headers })
         .then(response => {
             if(response.data.status === 200) {
                 location.post(
@@ -63,7 +66,7 @@ const patch = (req, next) => {
     else
         return next({status: 400, msg: 'Bad request'}, null);
     
-        axios.post('/approvetransaction', {}, { headers: headers })
+        axios.post('/approvetransaction', { rules: { roles: ['user', 'administrator'] } }, { headers: headers })
         .then(response => {
             if(response.data.status === 200) {
                 const params = { id: req.headers.id, body: { ...req.body,  updated: moment().format() } };
@@ -100,7 +103,7 @@ const get = (req, next) => {
     else
         return next({status: 400, msg: 'Bad request'}, null);
     
-    axios.post('/approvetransaction', {}, { headers: headers })
+    axios.post('/approvetransaction', { rules: { roles: ['user'] } }, { headers: headers })
     .then(response => {
         if(response.data.status === 200) {
             location.get(req.headers, (err, res) => {
@@ -134,7 +137,7 @@ const all = (req, next) => {
     else
         return next({status: 400, msg: 'Bad request'}, null);
     
-    axios.post('/approvetransaction', {}, { headers: headers })
+    axios.post('/approvetransaction', { rules: { roles: ['user'] } }, { headers: headers })
     .then(response => {
         if(response.data.status === 200) {
             location.all(req, (err, res) => {

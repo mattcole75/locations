@@ -124,7 +124,69 @@ describe('Test the location microservice POST methods', () => {
                 expect(res.body.user.displayName).toBe('Fitz Farseer');
                 expect(res.body.user.email).toBe('fitz.farseer@system.com');
                 expect(res.body.user.idToken).toHaveLength(256);
-                idToken = res.body.user.idToken;        
+                idToken = res.body.user.idToken;
+                localId = res.body.user.localId;
+            })
+    });
+
+    locations.forEach(location => {
+
+        it('should, create a location given the right information', async () => {
+            await endPoint.post('/location')
+                .set({
+                    idToken: idToken
+                })
+                .send({
+                    name: location.name,
+                    description: location.description,
+                    address: {
+                        line1: location.address.line1,
+                        line2: location.address.line2,
+                        city: location.address.city,
+                        postcode: location.address.postcode
+                    },
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    what3words: location.what3words,
+                    created:  location.created,
+                    updated: location.updated,
+                    inuse: location.inUse
+                })
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(403)
+        });
+    });
+
+
+    it('should, logout current user', async() => {
+        await auth.post('/user/logout')
+            .set({
+                idToken: idToken,
+                localId: localId
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+    })
+
+    it('should, login and return the user details and token for an administrator account', async () => {
+        await auth.post('/user/login')
+            .send({
+                email: 'kyle.haven@system.com',
+                password: crypto.createHash('sha256').update('letmein').digest('hex')
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => {
+                expect(res.body).toBeDefined();
+                expect(res.body.status).toBe(200);
+                expect(res.body.user.displayName).toBe('Kyle Haven');
+                expect(res.body.user.email).toBe('kyle.haven@system.com');
+                expect(res.body.user.idToken).toHaveLength(256);
+                idToken = res.body.user.idToken;
+                localId = res.body.user.localId; 
             })
     });
 
@@ -224,6 +286,7 @@ describe('Test the location microservice POST methods', () => {
         });
     });
 });
+
 describe('Test the auth call to ensure only valid tokens can GET locations', () => {
 
     it('should fail to return a location given the correct id with no token', async () => {
