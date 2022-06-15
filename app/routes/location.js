@@ -1,15 +1,13 @@
-// Description: Provides the routes for the auth functionality
-// Developer: Matt Cole
-// Date created: 2022-04-23
-// Change history:
-//  1. 
-
 const config = require('../../configuration/config');
 const application = config.get('application');
 const version = config.get('version');
 const location = require('../controller/location');
 
 module.exports = (app) => {
+
+    app.get('/', (req, res) => {
+        res.status(200).send({'msg': 'Server is up!'});
+    });
 
     app.post('/' + application + '/api/' + version + '/location', (req, res) => {
         location.post(req, (err, loc) => {

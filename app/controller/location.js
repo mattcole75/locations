@@ -1,9 +1,3 @@
-// Description: Provides the co-ordination for the auth functionality
-// Developer: Matt Cole
-// Date created: 2022-01-29
-// Change history:
-//  1.
-
 const location = require('../repository/location');
 const log = require('../../utility/logger')();
 const config = require('../../configuration/config');

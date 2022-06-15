@@ -1,14 +1,11 @@
-// Description: Jest tests to support a TDD development approach
-// Developer: Matt Cole
-// Date created: 2022-05-14
-// Change history:
-//  1. 
-
 const endPoint = require('./endPoint');
 const auth = require('./authEndPoint');
 const locations = require('../data/location');
 const crypto = require('crypto');
-const { send } = require('process');
+
+const config = require('../configuration/config');
+const application = config.get('application');
+const version = config.get('version');
 
 let level1Res;
 let level2Res;
@@ -24,7 +21,7 @@ describe('Test the auth call to ensure only valid tokens can POST locations', ()
 
     locations.forEach(location => {
         it('should, fail to create a location given no token', async () => {
-            await endPoint.post('/location')
+            await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     
                 })
@@ -52,7 +49,7 @@ describe('Test the auth call to ensure only valid tokens can POST locations', ()
 
     locations.forEach(location => {
         it('should, fail to create a location given empty token', async () => {
-            await endPoint.post('/location')
+            await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     idToken: ''
                 })
@@ -80,7 +77,7 @@ describe('Test the auth call to ensure only valid tokens can POST locations', ()
 
     locations.forEach(location => {
         it('should, fail to create a location given un-authorised token', async () => {
-            await endPoint.post('/location')
+            await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     idToken: wrongToken
                 })
@@ -132,7 +129,7 @@ describe('Test the location microservice POST methods', () => {
     locations.forEach(location => {
 
         it('should, create a location given the right information', async () => {
-            await endPoint.post('/location')
+            await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     idToken: idToken
                 })
@@ -194,7 +191,7 @@ describe('Test the location microservice POST methods', () => {
     locations.forEach(location1 => {
 
         it('should, create a location given the right information', async () => {
-            await endPoint.post('/location')
+            await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     idToken: idToken
                 })
@@ -229,7 +226,7 @@ describe('Test the location microservice POST methods', () => {
         location1.sublocations && location1.sublocations.forEach(location2 => {
 
             it('should, create a location given the right information', async () => {
-                await endPoint.post('/location')
+                await endPoint.post(application + '/api/' + version + '/location')
                 .set({
                     idToken: idToken
                 })
@@ -257,7 +254,7 @@ describe('Test the location microservice POST methods', () => {
             location2.sublocations && location2.sublocations.forEach(location3 => {
 
                 it('should, create a location given the right information', async () => {
-                    await endPoint.post('/location')
+                    await endPoint.post(application + '/api/' + version + '/location')
                     .set({
                         idToken: idToken
                     })
@@ -290,7 +287,7 @@ describe('Test the location microservice POST methods', () => {
 describe('Test the auth call to ensure only valid tokens can GET locations', () => {
 
     it('should fail to return a location given the correct id with no token', async () => {
-        await endPoint.get('/location')
+        await endPoint.get(application + '/api/' + version + '/location')
             .set({
                 id: level1Res.insertedId
             })
@@ -300,7 +297,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return a location given the correct id with empty token', async () => {
-        await endPoint.get('/location')
+        await endPoint.get(application + '/api/' + version + '/location')
             .set({
                 id: level1Res.insertedId,
                 idToken: ''
@@ -311,7 +308,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return a location given the correct id with un-authorised token', async () => {
-        await endPoint.get('/location')
+        await endPoint.get(application + '/api/' + version + '/location')
             .set({
                 id: level1Res.insertedId,
                 idToken: wrongToken
@@ -322,7 +319,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 1 locations when given no token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 
             })
@@ -332,7 +329,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 1 locations when given empty token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: ''
             })
@@ -342,7 +339,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 1 locations when given un-authorised token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: wrongToken
             })
@@ -352,7 +349,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail tp return all level 2 locations when given parent id and no token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level1Res.insertedId
             })
@@ -362,7 +359,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail tp return all level 2 locations when given parent id and empty token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level1Res.insertedId,
                 idToken: ''
@@ -373,7 +370,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail tp return all level 2 locations when given parent id and un-authorised token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level1Res.insertedId,
                 idToken: wrongToken
@@ -384,7 +381,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 3 locations when given parent id and no token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level2Res.insertedId
             })
@@ -394,7 +391,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 3 locations when given parent id and empty token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level2Res.insertedId,
                 idToken: ''
@@ -405,7 +402,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all level 3 locations when given parent id and un-authorised token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level2Res.insertedId,
                 idToken: wrongToken
@@ -416,7 +413,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all locations using a text filter and no token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 
             })
@@ -429,7 +426,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all locations using a text filter and empty token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: ''
             })
@@ -442,7 +439,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
     });
 
     it('should fail to return all locations using a text filter and un-authorised token', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: wrongToken
             })
@@ -458,7 +455,7 @@ describe('Test the auth call to ensure only valid tokens can GET locations', () 
 describe('Test the location microservice GET methods', () => {
 
     it('should successfully return a location given the correct id', async () => {
-        await endPoint.get('/location')
+        await endPoint.get(application + '/api/' + version + '/location')
             .set({
                 id: level1Res.insertedId,
                 idToken: idToken
@@ -474,7 +471,7 @@ describe('Test the location microservice GET methods', () => {
     });
 
     it('should successfully return all level 1 locations when given no parameters', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: idToken
             })
@@ -489,7 +486,7 @@ describe('Test the location microservice GET methods', () => {
     });
 
     it('should successfully return all level 2 locations when given parent id', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level1Res.insertedId,
                 idToken: idToken
@@ -505,7 +502,7 @@ describe('Test the location microservice GET methods', () => {
     });
 
     it('should successfully return all level 3 locations when given parent id', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 id: level2Res.insertedId,
                 idToken: idToken
@@ -521,7 +518,7 @@ describe('Test the location microservice GET methods', () => {
     });
 
     it('should successfully return all locations using a text filter', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: idToken
             })
@@ -544,7 +541,7 @@ describe('Test the auth call to ensure only valid tokens can PATCH locations', (
     let id;
 
     it('should successfully return all locations using a text filter', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: idToken
             })
@@ -563,7 +560,7 @@ describe('Test the auth call to ensure only valid tokens can PATCH locations', (
     });
 
     it('should, fail to patch a location given the right information and no token', async () => {
-        await endPoint.patch('/location')
+        await endPoint.patch(application + '/api/' + version + '/location')
             .set({
                 id: id
             })
@@ -576,7 +573,7 @@ describe('Test the auth call to ensure only valid tokens can PATCH locations', (
     });
 
     it('should, fail to patch a location given the right information and empty token', async () => {
-        await endPoint.patch('/location')
+        await endPoint.patch(application + '/api/' + version + '/location')
             .set({
                 id: id,
                 idToken: ''
@@ -590,7 +587,7 @@ describe('Test the auth call to ensure only valid tokens can PATCH locations', (
     });
 
     it('should, fail to patch a location given the right information and un-authorised token', async () => {
-        await endPoint.patch('/location')
+        await endPoint.patch(application + '/api/' + version + '/location')
             .set({
                 id: id,
                 idToken: wrongToken
@@ -610,7 +607,7 @@ describe('Test the location microservice PATCH methods', () => {
     let id;
 
     it('should successfully return all locations using a text filter', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: idToken
             })
@@ -629,7 +626,7 @@ describe('Test the location microservice PATCH methods', () => {
     });
 
     it('should, patch a location given the right information', async () => {
-        await endPoint.patch('/location')
+        await endPoint.patch(application + '/api/' + version + '/location')
             .set({
                 id: id,
                 idToken: idToken
@@ -651,7 +648,7 @@ describe('Test the location microservice PATCH methods', () => {
     });
 
     it('should successfully return all locations using a text filter', async () => {
-        await endPoint.get('/locations')
+        await endPoint.get(application + '/api/' + version + '/locations')
             .set({
                 idToken: idToken
             })
@@ -667,5 +664,34 @@ describe('Test the location microservice PATCH methods', () => {
                 expect(res.body.data).toHaveLength(1);
                 expect(res.body.data[0].description).toBe('Creative Space for Software Engineering');
             })
+    });
+});
+
+describe('Bug replication and fixes', () => {
+
+    it('should return 200 server is up', async () => {
+        await endPoint.get('')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then(res => {
+            expect(res.body.msg).toBe('Server is up!');
+        })
+    });
+
+    // monitoring the logs on the live server and clocked this request... someone trying to hack the system? 
+    it('should return 404 Not Found', async () => {
+        await endPoint.get('.env')
+        .expect(404)
+        .then(res => {
+            expect(res.res.statusMessage).toBe('Not Found');
+        })
+    });
+
+    it('should return 404 Not Found', async () => {
+        await endPoint.get('/index.html')
+        .expect(404)
+        .then(res => {
+            expect(res.res.statusMessage).toBe('Not Found');
+        })
     });
 });

@@ -1,9 +1,3 @@
-// Description: Provides the repository for the location app
-// Developer: Matt Cole
-// Date created: 2022-05-14
-// Change history:
-//  1. 
-
 const { ObjectId } = require('mongodb');
 const database = require('../../configuration/database');
 
